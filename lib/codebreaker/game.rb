@@ -8,7 +8,7 @@ module Codebreaker
     end
     
     #dificalty may be 1 = easy, 2 = normal, 3 = hard
-    def difficalty(value = 1)
+    def difficalty(value)
       @hint = 1
       @value = value
       case @value
