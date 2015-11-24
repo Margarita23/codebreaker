@@ -19,7 +19,7 @@ module Codebreaker
       @your_guess = @your_guess.split("").map { |s| s.to_i }
       @user_code = @game.submit_code(@your_guess)
       @result = @game.check_submit_code
-      print (@result)
+      puts (@result)
     end
       def hint(text)
         @text = text
@@ -46,14 +46,13 @@ module Codebreaker
         if @game.loss? || @game.win?
           break
         else
-          print @game.instance_variable_get(:@secret_code)
           puts @game.loss?
           puts @game.win?
           make_guess
         end
       end
       puts("You are winner!") if @game.win?
-      puts("You are lose!") if @game.loss?
+      puts("You are lose!" + "#{@game.instance_variable_get(:@secret_code)}") if @game.loss?
       save
     end
   end
