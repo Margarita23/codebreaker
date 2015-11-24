@@ -46,7 +46,6 @@ module Codebreaker
         if @game.loss? || @game.win?
           break
         else
-          print @game.instance_variable_get(:@attempts)
           print @game.instance_variable_get(:@secret_code)
           puts @game.loss?
           puts @game.win?
