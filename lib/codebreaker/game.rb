@@ -91,7 +91,7 @@ module Codebreaker
     def new_player(name)
       @use_attempts = @att - @attempts
       win? ? @res_game = "win" : @res_game = "lose"
-      File.open("./players_data/#{name}_data.txt", "w") do |i|
+      File.open("./players_data/#{name}_data.txt", "a") do |i|
         i.puts(@time +" / " + @use_attempts.to_s + " / " + @res_game)
       end
     end
