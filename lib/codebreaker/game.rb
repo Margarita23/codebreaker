@@ -22,20 +22,19 @@ module Codebreaker
     end
     #---------start
     def start(difficalty = 1)
-      self.difficalty(difficalty)
-      @attempts = @att
+      difficalty(difficalty)
+      @attempts = @att.to_i
       @time = Time.now.strftime("%d/%m/%Y %H:%M")
-      @secret_code = self.generate_code
+      @secret_code = generate_code
     end
     #---------Code-breaker submit guess
     def submit_code(guess)
-      if loss?
-        complete_game
-      else
-        @guess = guess
+      @guess = guess
+      if loss? != true
+        @attempts = @attempts - 1
         check_submit_code
-        win? ? complete_game : @attempts-=1
       end
+      @guess
     end
     
     def get_pluses
@@ -54,7 +53,6 @@ module Codebreaker
     end
     
     def get_minuses
-      self.get_pluses
       @res_minus = []
       @no_plus_sub, @no_plus_sec = @without_plus_sub.uniq, @without_plus_sec.uniq
       @no_plus_sub.each do |elem_ub|
@@ -68,7 +66,8 @@ module Codebreaker
     end
     
     def check_submit_code
-      self.get_minuses
+      get_pluses
+      get_minuses
       @result = @res_plus + @res_minus
     end
     #---------Code-breaker wins game
@@ -79,11 +78,7 @@ module Codebreaker
     def loss?
       @attempts==0 ? true : false
     end
-    #---------Code-breaker plays again
-    #---------complete the game
-    # 0 - not play again, 1 - play again
-    def complete_game
-    end
+  
     #---------Code-breaker requests hint
     def get_hint
       if @hint !=0
@@ -96,11 +91,10 @@ module Codebreaker
     def new_player(name)
       @use_attempts = @att - @attempts
       win? ? @res_game = "win" : @res_game = "lose"
-      File.open("../../players_data/#{name}_data.txt", "w") do |i|
-        i.puts(@time + @use_attempts.to_s + @res_game)
+      File.open("./players_data/#{name}_data.txt", "w") do |i|
+        i.puts(@time +" / " + @use_attempts.to_s + " / " + @res_game)
       end
     end
     
   end
 end
-
