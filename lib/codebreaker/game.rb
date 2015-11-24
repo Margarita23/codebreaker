@@ -89,6 +89,7 @@ module Codebreaker
     end
     #---------Code-breaker saves score
     def new_player(name)
+      raise "Missing name" if name == ""
       @use_attempts = @att - @attempts
       win? ? @res_game = "win" : @res_game = "lose"
       File.open("./players_data/#{name}_data.txt", "a") do |i|
