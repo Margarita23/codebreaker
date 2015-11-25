@@ -2,12 +2,11 @@ require 'spec_helper'
 require './lib/codebreaker/game.rb' 
 module Codebreaker
   describe Game do
-    
-    describe "#start" do
-      before(:all) do
+    before(:all) do
         @game = Codebreaker::Game.new
         @secret_code = @game.start
       end
+    describe "#start" do
       it "generates secret code" do
         expect(@secret_code).to eq(@game.instance_variable_get(:@array_of_digits))
       end
@@ -23,7 +22,6 @@ module Codebreaker
     
     describe "#Code-breaker submit guess" do
       before(:each) do
-        @game = Codebreaker::Game.new
         @secret_code = @game.start
         @game.instance_variable_set(:@secret_code,[1,2,3,4])
       end
@@ -149,9 +147,6 @@ module Codebreaker
     end
     
     describe "#Code-breaker loses game" do
-      before do
-        @game = Codebreaker::Game.new
-      end
       it "should spend three attempts whith difficalt - hard" do
         @secret_code = @game.start(3)
         @game.instance_variable_set(:@secret_code,[1,2,3,4])
@@ -195,7 +190,6 @@ module Codebreaker
     
     describe "#Code-breaker requests hint" do
       before do
-        @game = Codebreaker::Game.new
         @secret_code = @game.start
         @game.instance_variable_set(:@secret_code,[1,2,3,4])
       end
@@ -204,17 +198,17 @@ module Codebreaker
         expect(hint.is_a? Fixnum).to eq(true)
       end
       it "should give any one of secret code" do
-         @game.instance_variable_set(:@secret_code,[1,1,1,1])
+        @game.instance_variable_set(:@secret_code,[1,1,1,1])
         hint = @game.get_hint
         expect(hint).to eq(1)
       end
       it "should give tree of secret code" do
-         @game.instance_variable_set(:@secret_code,[3,3,3,3])
+        @game.instance_variable_set(:@secret_code,[3,3,3,3])
         hint = @game.get_hint
         expect(hint).to eq(3)
       end
       it "should give the one number of secret code" do
-         @game.instance_variable_set(:@secret_code,[6,6,6,6])
+        @game.instance_variable_set(:@secret_code,[6,6,6,6])
         hint = @game.get_hint
         expect(hint).to eq(6)
       end
