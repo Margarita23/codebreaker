@@ -29,7 +29,7 @@ module Codebreaker
     end
     #---------Code-breaker submit guess
     def submit_code(guess)
-      #raise ArgumentError, "Should be string of four characters", if guess.length < 4 
+      raise ArgumentError, 'Should be string of four characters' if guess.length != NUM_COUNT
       @guess = guess
       if loss? != true
         @attempts = @attempts - 1
@@ -38,9 +38,7 @@ module Codebreaker
     end
     
     def get_pluses
-      @res_plus = []
-      @without_plus_sec = []
-      @without_plus_sub = []
+      @res_plus, @without_plus_sec, @without_plus_sub = [], [], []
       @secret_code.each_index do |i| 
         if @guess[i] == @secret_code[i]
           @res_plus.push("+")
@@ -53,10 +51,7 @@ module Codebreaker
     end
     
     def get_minuses
-      @res_minus = []
-      @minus_sub = []
-      @minus_sec = []
-      
+      @res_minus, @minus_sub, @minus_sec = [], [], []
       @un_sec = @without_plus_sec.uniq
       @un_sub = @without_plus_sub.uniq
       @un_sub.each_index do |i|
@@ -93,7 +88,7 @@ module Codebreaker
     end
     #---------Code-breaker loses game
     def loss?
-      @attempts==0
+      @attempts == 0
     end
     #---------Code-breaker plays again
     #---------complete the game
