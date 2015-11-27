@@ -37,9 +37,8 @@ module Codebreaker
       end
       @guess = guess
     end
-    
-    def get_pluses
-      @res_plus, @without_plus_sec, @without_plus_sub  = [], [], []
+    def check_submit_code
+      @res_plus,@res_minus, @without_plus_sec, @without_plus_sub  = [], [], [], []
       @secret_code.each_index do |i| 
         if @guess[i] == @secret_code[i]
           @res_plus.push("+")
@@ -48,39 +47,16 @@ module Codebreaker
           @without_plus_sub.push(@guess[i])
         end
       end
-      @res_plus
-    end
-    
-    def get_minuses
-      @res_minus, @minus_sub, @minus_sec = [], [], []
-      @un_sec = @without_plus_sec.uniq
-      @un_sub = @without_plus_sub.uniq
-      @un_sub.each_index do |i|
-        @without_plus_sec.each_index do |j|
-          if @un_sub[i] == @without_plus_sec[j]
-            @minus_sub.push("-")
-          end
-        end
-      end
-      @un_sec.each_index do |i|
-        @without_plus_sub.each_index do |j|
-          if @un_sec[i] == @without_plus_sub[j]
-            @minus_sec.push("-")
-          end
-        end
-      end
   
-      if @minus_sub.length <= @minus_sec.length
-        @res_minus = @minus_sub
-      else
-        @res_minus = @minus_sec
+      @without_plus_sub.each_index do |i|
+        @without_plus_sec.each_index do |j|
+          if @without_plus_sec[j] == @without_plus_sub[i]
+            @res_minus.push("-")
+            @without_plus_sec.delete_at(j)
+            @without_plus_sub.delete_at(i)
+          end
+        end
       end
-      @res_minus
-    end
-    
-    def check_submit_code
-      get_pluses
-      get_minuses
       @result = @res_plus + @res_minus
     end
     #---------Code-breaker wins game
@@ -108,5 +84,6 @@ module Codebreaker
         i.puts(@time +" / " + @use_attempts.to_s + " / " + @res_game)
       end
     end
+    
   end
 end
