@@ -4,8 +4,8 @@ module Codebreaker
     def new_game
       @game= Codebreaker::Game.new
     end
-    def choose_difficalt(difficalty)
-      @diff = difficalty.to_i
+    def choose_difficult(difficulty)
+      @diff = difficulty.to_i
     end
     def get_secret_code
       @secret_code = @game.start(@diff)
@@ -28,8 +28,8 @@ module Codebreaker
       puts("Let's play Codebreaker!")
       new_game
       puts("Choose the difficulty level! 1 - easy, 2 - normal, 3 - hard")
-      difficalty = gets.chomp
-      choose_difficalt(difficalty)
+      difficulty = gets.chomp
+      choose_difficult(difficulty)
       get_secret_code
       loop do
         if @game.loss? || @game.win?
