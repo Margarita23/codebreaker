@@ -37,6 +37,7 @@ module Codebreaker
         @secret_code = @game.start
         @game.instance_variable_set(:@secret_code,[1,2,3,4])
       end
+      
       it "get 4 numbers from user" do
         @submit_code = @game.submit_code([1,1,1,6])
         expect(@submit_code.size).to eq(@secret_code.size)
@@ -50,73 +51,68 @@ module Codebreaker
       describe "an exact match:" do
         it "gets four pluses if four numbers of indices are the same" do
           @game.submit_code([1,2,3,4])
-          result = @game.get_pluses
+          result = @game.check_submit_code
           expect(result).to eq(["+","+","+","+"])
         end
         it "gets three pluses if three numbers of indices are the same" do
           @game.submit_code([1,3,3,4])
-          result = @game.get_pluses
+          result = @game.check_submit_code
           expect(result).to eq(["+","+","+"])
         end
-        it "gets two pluses if two numbers of indices are the same" do
+        it "gets two pluses if two numbers of indices are the same and one minus" do
           @game.submit_code([1,5,3,2])
-          result = @game.get_pluses
-          expect(result).to eq(["+","+"])
+          result = @game.check_submit_code
+          expect(result).to eq(["+","+","-"])
         end
         it "gets plus if only one number of indices are the same" do
           @game.submit_code([2,2,2,2])
-          result = @game.get_pluses
+          result = @game.check_submit_code
           expect(result).to eq(["+"])
         end
         it "get an empty array if there are no matches on indeces" do
-          @game.submit_code([2,5,2,2])
-          result = @game.get_pluses
+          @game.submit_code([6,6,6,6])
+          result = @game.check_submit_code
           expect(result).to eq([])
         end
       end
       describe "a number match:" do
         it "get new array from secret code without numbers that have matchers by values and indeces" do
           @game.submit_code([1,2,6,5])
-          @game.get_pluses
+          @game.check_submit_code
           no_plus = @game.instance_variable_get(:@without_plus_sec)
           expect(no_plus).to eq([3,4])
         end
         it "get new array from submit code without numbers that have matchers by values and indeces" do
           @game.submit_code([1,2,6,5])
-          @game.get_pluses
+          @game.check_submit_code
           no_plus = @game.instance_variable_get(:@without_plus_sub)
           expect(no_plus).to eq([6,5])
         end
       end
       describe "after get minuses" do
-        it "get 4 minuses" do
-          @game.submit_code([4,3,2,1])
-          @game.get_pluses
-          res_minus = @game.get_minuses
-          expect(res_minus).to eq(["-","-","-","-"])
-        end
-        it "get 3 minuses" do
-          @game.submit_code([4,1,3,2])
-          @game.get_pluses
-          res_minus = @game.get_minuses
-          expect(res_minus).to eq(["-","-","-"])
-        end
+        
+        
+      it "get 4 numbers from user" do
+        @game.instance_variable_set(:@secret_code,[3,4,4,4])
+        @submit_code = @game.submit_code([4,3,3,3])
+        res = @game.check_submit_code
+        expect(res).to eq(["-","-"])
+      end
+      
         it "get 2 minuses" do
           @game.submit_code([1,3,2,4])
-          @game.get_pluses
-          res_minus = @game.get_minuses
-          expect(res_minus).to eq(["-","-"])
+          res = @game.check_submit_code
+          expect(res).to eq(["+","+","-"])
         end
         it "get 2 minus in result" do
           @game.submit_code([3,3,1,1])
-          res_minus = @game.get_minuses
-          expect(res_minus).to eq(["-","-"])
+          res = @game.check_submit_code
+          expect(res).to eq(["-","-"])
         end
         it "get 1 minuses" do
           @game.submit_code([5,4,5,6])
-          @game.get_pluses
-          res_minus = @game.get_minuses
-          expect(res_minus).to eq(["-"])
+          res = @game.check_submit_code
+          expect(res).to eq(["-"])
         end
       end
       describe "get the right results in the comparison of the alleged code and secret code" do
@@ -158,7 +154,7 @@ module Codebreaker
     describe "#Code-breaker wins game" do
       before do
         @game.submit_code(@secret_code)
-        @game.get_pluses
+        @game.check_submit_code
       end
       it "may say you win" do
         expect(@game.respond_to?(:win?)).to be_truthy
