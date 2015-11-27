@@ -23,22 +23,23 @@ module Codebreaker
     #---------start
     def start(difficalty = 1)
       difficalty(difficalty)
-      @attempts = @att.to_i
+      @attempts = @att
       @time = Time.now.strftime("%d/%m/%Y %H:%M")
       @secret_code = generate_code
     end
     #---------Code-breaker submit guess
     def submit_code(guess)
-      raise ArgumentError, 'Should be string of four characters' if guess.length != NUM_COUNT
+      raise ArgumentError, 'Should be an array of four elements' if guess.length != NUM_COUNT
       @guess = guess
       if loss? != true
         @attempts = @attempts - 1
         check_submit_code
       end
+      @guess = guess
     end
     
     def get_pluses
-      @res_plus, @without_plus_sec, @without_plus_sub = [], [], []
+      @res_plus, @without_plus_sec, @without_plus_sub  = [], [], []
       @secret_code.each_index do |i| 
         if @guess[i] == @secret_code[i]
           @res_plus.push("+")
@@ -68,7 +69,7 @@ module Codebreaker
           end
         end
       end
-
+  
       if @minus_sub.length <= @minus_sub.length
         @res_minus = @minus_sub
       else
@@ -88,10 +89,8 @@ module Codebreaker
     end
     #---------Code-breaker loses game
     def loss?
-      @attempts == 0
+      @attempts==0
     end
-    #---------Code-breaker plays again
-    #---------complete the game
   
     #---------Code-breaker requests hint
     def get_hint
@@ -103,7 +102,7 @@ module Codebreaker
     end
     #---------Code-breaker saves score
     def new_player(name)
-      raise "Missing name" if name == ""
+      raise 'Missing name' if name == ""
       @use_attempts = @att - @attempts
       win? ? @res_game = "win" : @res_game = "lose"
       File.open("./players_data/#{name}_data.txt", "a") do |i|
