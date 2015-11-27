@@ -14,9 +14,21 @@ module Codebreaker
         expect(@secret_code.length).to eq(4)
       end
       it "saves secret code with numbers from 1 to 6" do
-        @secret_code.each do |x|
-          expect(x<=6 ||x>=1).to eq(true)
-        end 
+        expect(@secret_code).to all(satisfy{|el| el>=1 && el<=6})
+      end
+      it "should not set the level of difficulty" do
+        expect{@game.start("asd3")}.to raise_error(TypeError)
+      end
+      it "should not set the level of difficulty" do
+        @game.start("1asd3")
+        expect(@game.instance_variable_get(:@value)).to eq(1)
+      end
+      it "should set the level of difficulty" do
+        @game.start("3try2")
+        expect(@game.instance_variable_get(:@value)).to eq(3)
+      end
+      it "should set the level of difficulty" do
+        expect(@game.instance_variable_get(:@value)).to eq(3)
       end
     end
     
@@ -207,9 +219,5 @@ module Codebreaker
         expect(hint).to be(nil)
       end
     end
-    
-    describe "#Code-breaker saves score" do
-    end
-    
   end
 end
