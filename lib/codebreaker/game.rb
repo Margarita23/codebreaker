@@ -6,7 +6,6 @@ module Codebreaker
     def generate_code
       @array_of_digits = NUM_COUNT.times.map{FROM + Random.rand(TO)}
     end
-    
     #dificalty may be 1 = easy, 2 = normal, 3 = hard
     def difficalty(value)
       raise TypeError, 'difficalt should be 1,2,3' if !(1..3).cover?(value.to_i)
@@ -71,7 +70,7 @@ module Codebreaker
         end
       end
   
-      if @minus_sub.length <= @minus_sub.length
+      if @minus_sub.length <= @minus_sec.length
         @res_minus = @minus_sub
       else
         @res_minus = @minus_sec
@@ -92,9 +91,6 @@ module Codebreaker
     def loss?
       @attempts==0
     end
-    #---------Code-breaker plays again
-    #---------complete the game
-  
     #---------Code-breaker requests hint
     def get_hint
       if @hint !=0
@@ -112,6 +108,5 @@ module Codebreaker
         i.puts(@time +" / " + @use_attempts.to_s + " / " + @res_game)
       end
     end
-    
   end
 end
