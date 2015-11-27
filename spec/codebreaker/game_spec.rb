@@ -29,6 +29,12 @@ module Codebreaker
         @submit_code = @game.submit_code([1,1,1,6])
         expect(@submit_code.size).to eq(@secret_code.size)
       end
+      it "should lose one attempt" do
+        expect{@game.submit_code([1,2,3,3])}.to change{@game.instance_variable_get(:@attempts)}.by(-1)
+      end
+      it "return error if the guess has only three digits" do
+        expect{@game.submit_code([1,1,1])}.to raise_error(ArgumentError) 
+      end
       describe "an exact match:" do
         it "gets four pluses if four numbers of indices are the same" do
           @game.submit_code([1,2,3,4])
@@ -128,20 +134,17 @@ module Codebreaker
           expect(result).to eq(["+","+","-"])
         end
         #-------------------------------need to write
-        #-------------------------------
-        #-------------------------------
+
       end
     end
     
     describe "#Code-breaker wins game" do
       before do
-        @game = Codebreaker::Game.new
-        @secret_code = @game.start
         @game.submit_code(@secret_code)
         @game.get_pluses
       end
       it "may say you win" do
-        expect(@game.win?).to eq(true)
+        expect(@game.respond_to?(:win?)).to be_truthy
       end
       
     end
@@ -175,47 +178,33 @@ module Codebreaker
           end
       it "may say you lose" do
         @secret_code = @game.start(3)
-        @game.instance_variable_set(:@secret_code,[1,2,3,4])
-        count = @game.instance_variable_get(:@attempts)
-        count.times do
-          @game.submit_code([1,2,1,6])
-        end
-        expect(@game.loss?).to eq(true)
+          @game.instance_variable_set(:@attempts, 0)
+        expect(@game.loss?).to be_truthy
       end
     end
-    #------------------
-    #------------------
-    describe "#Code-breaker plays again" do
-    end
-    
+  
     describe "#Code-breaker requests hint" do
-      before do
+      before (:each) do
         @secret_code = @game.start
         @game.instance_variable_set(:@secret_code,[1,2,3,4])
       end
       it "should give the one number of secret code" do
         hint = @game.get_hint
-        expect(hint.is_a? Fixnum).to eq(true)
+        expect(hint).to be_a(Fixnum)
       end
       it "should give any one of secret code" do
         @game.instance_variable_set(:@secret_code,[1,1,1,1])
         hint = @game.get_hint
         expect(hint).to eq(1)
       end
-      it "should give tree of secret code" do
-        @game.instance_variable_set(:@secret_code,[3,3,3,3])
+      it "secret code should include a hint" do
         hint = @game.get_hint
-        expect(hint).to eq(3)
-      end
-      it "should give the one number of secret code" do
-        @game.instance_variable_set(:@secret_code,[6,6,6,6])
-        hint = @game.get_hint
-        expect(hint).to eq(6)
+        expect(@game.instance_variable_get(:@secret_code)).to include(hint)
       end
       it "don't give the second hint" do
         hint = @game.get_hint
         hint = @game.get_hint
-        expect(hint).to eq(nil)
+        expect(hint).to be(nil)
       end
     end
     
