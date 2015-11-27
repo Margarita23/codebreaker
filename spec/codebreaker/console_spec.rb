@@ -10,23 +10,23 @@ module Codebreaker
     end
     it "should not set the level of difficulty" do
       @game.new_game
-      @game.choose_difficalt("asd")
+      @game.choose_difficult("asd")
       expect{@game.get_secret_code}.to raise_error(TypeError)
     end
     it "should not set the level of difficulty" do
       @game.new_game
-      diff = @game.choose_difficalt("3try2")
+      diff = @game.choose_difficult("3try2")
       expect(diff).to eq(3)
     end
     it "should set the level of difficulty" do
-      diff = [@game.choose_difficalt("3"),@game.choose_difficalt("2"),@game.choose_difficalt("1")]
+      diff = [@game.choose_difficult("3"),@game.choose_difficult("2"),@game.choose_difficult("1")]
       expect(diff).to match([3,2,1])
     end
     describe "secret code, hints and make_guess" do
       before do
         @game = Codebreaker::Console.new
         @game.new_game
-        @game.choose_difficalt("3")
+        @game.choose_difficult("3")
         @sec_code = @game.get_secret_code
       end
       it "should get secret code than exist 4 digits" do 
