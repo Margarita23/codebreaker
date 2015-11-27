@@ -145,7 +145,12 @@ module Codebreaker
           result = @game.check_submit_code
           expect(result).to eq(["+","+","-"])
         end
-        #-------------------------------need to write
+        it "get 2 plus and 1 minus in result" do
+          @game.instance_variable_set(:@secret_code,[2,4,4,2])
+          @game.submit_code([1,2,3,4])
+          result = @game.check_submit_code
+          expect(result).to eq(["-","-"])
+        end
 
       end
     end
