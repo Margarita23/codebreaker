@@ -34,6 +34,7 @@ module Codebreaker
       @guess = guess
       if !loss?
         @attempts = @attempts - 1
+        check_submit_code
       end
       @guess = guess
     end
