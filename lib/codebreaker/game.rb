@@ -34,9 +34,9 @@ module Codebreaker
       @guess = guess
       if !loss?
         @attempts = @attempts - 1
-        check_submit_code
+        @ultimate_result = check_submit_code
       end
-      @guess = guess
+      @ultimate_result
     end
     
     def check_submit_code
