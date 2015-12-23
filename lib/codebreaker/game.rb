@@ -30,7 +30,7 @@ module Codebreaker
     end
 
     def submit_code(guess)
-      raise ArgumentError, 'Should be an array of four elements #{guess}' if guess.length != NUM_COUNT
+      raise ArgumentError, 'Should be an array of four elements' if guess.length != NUM_COUNT
       @guess = guess
       if !loss?
         @attempts = @attempts - 1
