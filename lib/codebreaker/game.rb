@@ -31,8 +31,6 @@ module Codebreaker
 
     def submit_code(guess)
       raise ArgumentError, 'Should be an array of four elements' if guess.length != NUM_COUNT
-      @ultimate_result = []
-      @guess = guess
       if !loss?
         @attempts = @attempts - 1
       end
@@ -42,22 +40,21 @@ module Codebreaker
       @res_plus,@res_minus = [], []
       secret = []
       secret = secret | @secret_code
-      guess = @guess
       NUM_COUNT.times do
         secret.each_index do |i| 
-          if guess[i] == secret[i]
+          if @guess[i] == secret[i]
             @res_plus.push("+")
-            guess.delete_at(i)
+            @guess.delete_at(i)
             secret.delete_at(i)
           end
         end
       end
       NUM_COUNT.times do
-        guess.each_index do |i|
+        @guess.each_index do |i|
           secret.each_index do |j|
-            if guess[i] == secret[j]
+            if @guess[i] == secret[j]
               secret.delete_at(j)
-              guess.delete_at(i)
+              @guess.delete_at(i)
               @res_minus.push("-")
             end
           end
