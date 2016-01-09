@@ -40,7 +40,8 @@ module Codebreaker
     
     def check_submit_code
       @res_plus,@res_minus = [], []
-      secret = @secret_code
+      secret = []
+      secret = secret | @secret_code
       guess = @guess
       NUM_COUNT.times do
         secret.each_index do |i| 
