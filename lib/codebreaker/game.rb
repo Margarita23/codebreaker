@@ -32,18 +32,18 @@ module Codebreaker
     def submit_code(guess)
       raise ArgumentError, 'Should be an array of four elements' if guess.length != NUM_COUNT
       @ult_res = []
-      @guess = guess
       if !loss?
         @attempts = @attempts - 1
-        @ult_res = check_submit_code
+        @ult_res = check_submit_code(guess)
       end
       @ult_res
     end
     
-    def check_submit_code
+    def check_submit_code(gu)
       @res_plus,@res_minus = [], []
       secret = []
-      secret = secret | @secret_code
+      @secret_code.each {|x| secret.push(x)}
+      @guess = gu
       NUM_COUNT.times do
         secret.each_index do |i| 
           if @guess[i] == secret[i]
